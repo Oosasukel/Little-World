@@ -17,9 +17,9 @@ public class PlanetGeneratorEditor : Editor
 
         serializedObject.Update();
 
-        if (GUILayout.Button("Test"))
+        if (GUILayout.Button("Generate Planet"))
         {
-            (serializedObject.targetObject as PlanetGenerator).Test();
+            (serializedObject.targetObject as PlanetGenerator).GeneratePlanet();
         }
 
         serializedObject.ApplyModifiedProperties();
