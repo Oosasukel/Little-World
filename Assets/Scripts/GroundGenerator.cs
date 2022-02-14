@@ -84,8 +84,8 @@ public class GroundGenerator : MonoBehaviour
 
         for (int i = 0; i < generatorVertices.Length; i++)
         {
-            // @TODO colocar o 0.1f em um lugar melhor
-            newVertices[i] = generatorVertices[i].normalized * (1 + (groundHeight * 0.1f));
+            // @TODO colocar o 0.1f em um lugar melhor e com valor calculado proporcional ao tamanho fixo, não porcentagem
+            newVertices[i] = generatorVertices[i] * (1 + (groundHeight * 0.1f));
         }
         newVertices[face.Length] = Vector3.zero;
 

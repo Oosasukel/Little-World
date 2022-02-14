@@ -17,12 +17,15 @@ public class PlanetGenerator : MonoBehaviour
     private WorldConfigSO worldConfig;
     private GameObject planet;
     [SerializeField]
-    private Material defaultMaterial;
+    private Material polygonGeneratorMaterial;
+    [SerializeField]
+    private Material waterMaterial;
 
     public void GeneratePlanet()
     {
         InitPolyhedronFromJson();
         InstantiatePolygons();
+        GenerateWater();
     }
 
     private void InitPolyhedronFromJson()
@@ -58,6 +61,7 @@ public class PlanetGenerator : MonoBehaviour
         for (int i = 0; i < vertices.Count; i++)
         {
             var currentVertice = vertices[i];
+            // @TODO mudar o tamanho aqui proporcional a quantidade de poligonos para sempre manter o mesmo tamanho
             polyhedron.Vertices[i] = new Vector3(currentVertice[0].AsFloat, currentVertice[1].AsFloat, currentVertice[2].AsFloat);
         }
     }
@@ -92,10 +96,11 @@ public class PlanetGenerator : MonoBehaviour
 
         CalculateFaceTriangles(face, polyhedron.Vertices, out polyVertices, out polyTriangles, out polyFace);
 
-        MeshRenderer surfaceRenderer = polygon.AddComponent<MeshRenderer>();
-        surfaceRenderer.material = defaultMaterial;
+        MeshRenderer polygonRenderer = polygon.AddComponent<MeshRenderer>();
+        polygonRenderer.material = polygonGeneratorMaterial;
 
         var polygonMesh = GenerateMesh(polyTriangles, polyVertices);
+        polygonMesh.RecalculateNormals();
         MeshFilter meshFilter = polygon.AddComponent<MeshFilter>();
         meshFilter.mesh = polygonMesh;
 
@@ -140,7 +145,7 @@ public class PlanetGenerator : MonoBehaviour
 
     private Mesh GenerateMesh(int[][] meshTriangles, Vector3[] meshVertices)
     {
-        Mesh polygonMesh = new Mesh();
+        Mesh mesh = new Mesh();
 
         int vertexCount = meshTriangles.Length * 3;
 
@@ -171,15 +176,77 @@ public class PlanetGenerator : MonoBehaviour
             normals[j * 3 + 2] = meshVertices[triangle[2]];
         }
 
-        polygonMesh.vertices = vertices;
-        polygonMesh.normals = normals;
+        mesh.vertices = vertices;
+        mesh.normals = normals;
         // terrainMesh.colors32 = colors;
 
-        polygonMesh.SetTriangles(indices, 0);
+        mesh.SetTriangles(indices, 0);
 
-        polygonMesh.RecalculateNormals();
+        return mesh;
+    }
 
-        return polygonMesh;
+    private int[][] CalculatePolyhedronTriangles()
+    {
+        int[][] triangles;
+
+        int numberOfTriangles = 0;
+        foreach (var face in polyhedron.Faces)
+        {
+            numberOfTriangles += face.Length - 2;
+        }
+
+        triangles = new int[numberOfTriangles][];
+        int currentTriangleIndex = 0;
+
+        for (int i = 0; i < polyhedron.Faces.Length; i++)
+        {
+            var face = polyhedron.Faces[i];
+
+            if (face.Length > 3)
+            {
+                for (int j = 0; j < face.Length - 2; j++)
+                {
+                    var vertice2 = face[j + 1];
+                    var vertice3 = face[j + 2];
+
+                    triangles[currentTriangleIndex++] = new int[3] { face[0], vertice2, vertice3 };
+                }
+            }
+            else
+            {
+                triangles[currentTriangleIndex++] = new int[3] { face[0], face[1], face[2] };
+            }
+        }
+
+
+        return triangles;
+    }
+
+    private void GenerateWater()
+    {
+        var waterParent = new GameObject("Water");
+        waterParent.transform.parent = planet.transform;
+        var waterSurface = new GameObject("Surface");
+        waterSurface.transform.parent = waterParent.transform;
+        var waterGround = new GameObject("Ground");
+        waterGround.transform.parent = waterParent.transform;
+        // @TODO levar em consideração o tamanho do planeta para ficar sempre a mesma altura independente do tamanho do planeta
+        waterSurface.transform.localScale *= 1.01f;
+        waterGround.transform.localScale *= 0.95f;
+
+        var polyhedronTriangles = CalculatePolyhedronTriangles();
+
+        var waterMesh = GenerateMesh(polyhedronTriangles, polyhedron.Vertices);
+
+        MeshRenderer waterRenderer = waterSurface.AddComponent<MeshRenderer>();
+        waterRenderer.material = waterMaterial;
+        MeshFilter waterMeshFilter = waterSurface.AddComponent<MeshFilter>();
+        waterMeshFilter.mesh = waterMesh;
+
+        MeshRenderer waterGroundRenderer = waterGround.AddComponent<MeshRenderer>();
+        waterGroundRenderer.material = polygonGeneratorMaterial;
+        MeshFilter waterGroundMeshFilter = waterGround.AddComponent<MeshFilter>();
+        waterGroundMeshFilter.mesh = waterMesh;
     }
 
     // private void DrawFaces()

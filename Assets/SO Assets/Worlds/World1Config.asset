@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47d6badb36aa74b478433d6618f6245c, type: 3}
   m_Name: World1Config
   m_EditorClassIdentifier: 
-  activePolygons: 
+  activePolygons: 0100010101000100010001000000000000000000000000000000000000000000
