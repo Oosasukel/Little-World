@@ -71,6 +71,8 @@ public class PlanetGenerator : MonoBehaviour
         if (planet) DestroyImmediate(planet);
         // @TODO mudar o scale do planet com base no tamanho de um polígono
         planet = new GameObject("Planet");
+        planet.AddComponent<GravityAttractor>();
+
         var polygonsParent = new GameObject("Polygons");
         polygonsParent.transform.parent = planet.transform;
         var groundParent = new GameObject("Ground");
@@ -242,11 +244,18 @@ public class PlanetGenerator : MonoBehaviour
         waterRenderer.material = waterMaterial;
         MeshFilter waterMeshFilter = waterSurface.AddComponent<MeshFilter>();
         waterMeshFilter.mesh = waterMesh;
+        MeshCollider waterMeshCollider = waterSurface.AddComponent<MeshCollider>();
+        waterMeshCollider.convex = true;
+        waterMeshCollider.sharedMesh = waterMesh;
+        waterMeshCollider.isTrigger = true;
 
         MeshRenderer waterGroundRenderer = waterGround.AddComponent<MeshRenderer>();
         waterGroundRenderer.material = polygonGeneratorMaterial;
         MeshFilter waterGroundMeshFilter = waterGround.AddComponent<MeshFilter>();
         waterGroundMeshFilter.mesh = waterMesh;
+        MeshCollider waterGroundMeshCollider = waterGround.AddComponent<MeshCollider>();
+        waterGroundMeshCollider.convex = true;
+        waterGroundMeshCollider.sharedMesh = waterMesh;
     }
 
     // private void DrawFaces()
