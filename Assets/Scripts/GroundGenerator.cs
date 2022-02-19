@@ -46,6 +46,9 @@ public class GroundGenerator : MonoBehaviour
         var groundMesh = GenerateGroundMesh();
         MeshFilter meshFilter = ground.AddComponent<MeshFilter>();
         meshFilter.mesh = groundMesh;
+        MeshCollider meshCollider = ground.AddComponent<MeshCollider>();
+        meshCollider.convex = true;
+        meshCollider.sharedMesh = groundMesh;
 
         worldConfig.SetPolygonActive(index, true);
     }
