@@ -230,11 +230,12 @@ public class PlanetGenerator : MonoBehaviour
         waterParent.transform.parent = planet.transform;
         var waterSurface = new GameObject("Surface");
         waterSurface.transform.parent = waterParent.transform;
+        waterSurface.tag = "Water";
         var waterGround = new GameObject("Ground");
         waterGround.transform.parent = waterParent.transform;
         // @TODO levar em consideração o tamanho do planeta para ficar sempre a mesma altura independente do tamanho do planeta
         waterSurface.transform.localScale *= 1.01f;
-        waterGround.transform.localScale *= 0.95f;
+        waterGround.transform.localScale *= 0.90f;
 
         var polyhedronTriangles = CalculatePolyhedronTriangles();
 
