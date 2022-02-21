@@ -32,7 +32,6 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnTriggerEnter");
         if (other.CompareTag("Water"))
         {
             animator.SetBool("Swimming", true);
@@ -41,7 +40,6 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        Debug.Log("OnTriggerExit");
         if (other.CompareTag("Water"))
         {
             animator.SetBool("Swimming", false);
