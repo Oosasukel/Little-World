@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * mouseSensitivityX);
 
         moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+
+        if (Input.GetMouseButtonDown(0)) animator.SetTrigger("Attacking");
     }
 
     void FixedUpdate()

@@ -427,11 +427,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pickaxe
       objectReference: {fileID: 0}
+    - target: {fileID: 2415949616785281011, guid: ec33e97c2be2d93478961fcaa50da412, type: 3}
+      propertyPath: m_TagString
+      value: Pickaxe
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2755036406791717988, guid: ec33e97c2be2d93478961fcaa50da412, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ec33e97c2be2d93478961fcaa50da412, type: 3}
+--- !u!1 &5167123429980880626 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2415949616785281011, guid: ec33e97c2be2d93478961fcaa50da412, type: 3}
+  m_PrefabInstance: {fileID: 7364056102593491201}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7054461797741511588 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 564104040037986981, guid: ec33e97c2be2d93478961fcaa50da412, type: 3}
   m_PrefabInstance: {fileID: 7364056102593491201}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &884368747
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5167123429980880626}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.99999994}
+  m_Center: {x: 0, y: 0, z: 0}
