@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CollectibleResource : MonoBehaviour
 {
@@ -8,6 +9,10 @@ public class CollectibleResource : MonoBehaviour
     private CollectibleResourceSO collectibleResource;
     [SerializeField]
     private int currentAmount;
+    [SerializeField]
+    private InventorySO inventory;
+    [SerializeField]
+    private Text resourceAmountText;
 
     void Start()
     {
@@ -23,7 +28,9 @@ public class CollectibleResource : MonoBehaviour
             if (currentAmount < damage) damage = currentAmount;
 
             currentAmount -= damage;
-            Debug.Log($"+{damage}");
+
+            inventory.resourceAmount += damage;
+            resourceAmountText.text = inventory.resourceAmount.ToString();
 
             if (currentAmount <= 0) Destroy(gameObject);
         }
