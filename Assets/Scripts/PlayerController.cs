@@ -10,11 +10,23 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Animator animator;
 
-    void Start()
+    [Header("Player Step Climb")]
+    [SerializeField]
+    GameObject stepRayUpper;
+    [SerializeField]
+    GameObject stepRayLower;
+    [SerializeField]
+    float stepHeight = 0.3f;
+    [SerializeField]
+    float stepSmooth = 0.1f;
+
+    void Awake()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
+        stepRayUpper.transform.position = new Vector3(stepRayUpper.transform.position.x, stepHeight, stepRayUpper.transform.position.z);
     }
 
     void Update()
@@ -30,6 +42,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + transform.TransformDirection(moveDir) * moveSpeed * Time.deltaTime);
+        StepClimb();
     }
 
     void OnTriggerEnter(Collider other)
@@ -46,5 +59,22 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("Swimming", false);
         }
+    }
+
+    void StepClimb()
+    {
+        RaycastHit hitLower;
+        if (Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(Vector3.forward), out hitLower, 0.1f))
+        {
+
+            RaycastHit hitUpper;
+            if (Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(Vector3.forward), out hitUpper, 0.1f))
+            {
+                // @TODO substituir o up para ser relativo a rotação do personagem (e os ifs também)
+                rb.position -= new Vector3(0f, -stepSmooth, 0f);
+            }
+        }
+
+        // @TODO replicar para +45º e -45º
     }
 }
