@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
-        stepRayUpper.transform.position = new Vector3(stepRayUpper.transform.position.x, stepHeight, stepRayUpper.transform.position.z);
+        stepRayUpper.transform.position = new Vector3(stepRayUpper.transform.position.x, stepRayLower.transform.position.y + stepHeight, stepRayUpper.transform.position.z);
     }
 
     void Update()
@@ -66,10 +66,11 @@ public class PlayerController : MonoBehaviour
         RaycastHit hitLower;
         if (Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(Vector3.forward), out hitLower, 0.1f))
         {
-
+            Debug.Log("Lower Hit");
             RaycastHit hitUpper;
-            if (Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(Vector3.forward), out hitUpper, 0.1f))
+            if (!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(Vector3.forward), out hitUpper, 0.1f))
             {
+                Debug.Log("Upper not Hit");
                 // @TODO substituir o up para ser relativo a rotação do personagem (e os ifs também)
                 rb.position -= new Vector3(0f, -stepSmooth, 0f);
             }
