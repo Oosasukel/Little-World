@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // Look rotation:
+        // @TODO mudar para girar para o lado da velocidade, não junto com a camera
         transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * mouseSensitivityX);
 
         moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
@@ -64,15 +65,14 @@ public class PlayerController : MonoBehaviour
     void StepClimb()
     {
         RaycastHit hitLower;
-        if (Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(Vector3.forward), out hitLower, 0.1f))
+        if (Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(Vector3.forward), out hitLower, 0.01f))
         {
-            Debug.Log("Lower Hit");
             RaycastHit hitUpper;
-            if (!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(Vector3.forward), out hitUpper, 0.1f))
+            if (!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(Vector3.forward), out hitUpper, 0.05f))
             {
-                Debug.Log("Upper not Hit");
                 // @TODO substituir o up para ser relativo a rotação do personagem (e os ifs também)
-                rb.position -= new Vector3(0f, -stepSmooth, 0f);
+                // rb.position += new Vector3(0f, stepSmooth, 0f);
+                rb.position += transform.up.normalized * stepSmooth;
             }
         }
 
