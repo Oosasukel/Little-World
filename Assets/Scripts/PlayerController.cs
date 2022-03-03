@@ -70,12 +70,29 @@ public class PlayerController : MonoBehaviour
             RaycastHit hitUpper;
             if (!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(Vector3.forward), out hitUpper, 0.05f))
             {
-                // @TODO substituir o up para ser relativo a rotação do personagem (e os ifs também)
-                // rb.position += new Vector3(0f, stepSmooth, 0f);
+                // @TODO mover um pouco para frente também
                 rb.position += transform.up.normalized * stepSmooth;
             }
         }
 
-        // @TODO replicar para +45º e -45º
+        RaycastHit hitLower45;
+        if (Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(1.5f, 0, 1), out hitLower45, 0.01f))
+        {
+            RaycastHit hitUpper45;
+            if (!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(1.5f, 0, 1), out hitUpper45, 0.05f))
+            {
+                rb.position += transform.up.normalized * stepSmooth;
+            }
+        }
+
+        RaycastHit hitLowerMinus45;
+        if (Physics.Raycast(stepRayLower.transform.position, transform.TransformDirection(-1.5f, 0, 1), out hitLowerMinus45, 0.01f))
+        {
+            RaycastHit hitUpperMinus45;
+            if (!Physics.Raycast(stepRayUpper.transform.position, transform.TransformDirection(-1.5f, 0, 1), out hitUpperMinus45, 0.05f))
+            {
+                rb.position += transform.up.normalized * stepSmooth;
+            }
+        }
     }
 }
